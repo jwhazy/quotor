@@ -11,7 +11,14 @@ export const profileRouter = router({
             name: input.name,
           },
           include: {
-            quotes: {},
+            quotes: {
+              include: {
+                author: {},
+                comments: {},
+                likes: {},
+                replyFrom: {},
+              },
+            },
           },
         });
 
@@ -26,7 +33,14 @@ export const profileRouter = router({
             id: input.id,
           },
           include: {
-            quotes: {},
+            quotes: {
+              include: {
+                author: {},
+                comments: {},
+                likes: {},
+                replyFrom: {},
+              },
+            },
           },
         });
 

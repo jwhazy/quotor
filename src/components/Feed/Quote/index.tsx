@@ -54,10 +54,7 @@ const Quote = ({ quote }: { quote: Props }) => {
   const expand = () => Router.push(`/quote/${quote.id}`);
   return (
     <>
-      <div
-        className="flex cursor-pointer flex-col space-y-2 rounded-xl px-4 py-2 hover:bg-zinc-900/80"
-        onClick={expand}
-      >
+      <div className="flex cursor-pointer flex-col space-y-2 rounded-xl px-4 py-2 hover:bg-zinc-900/80">
         {quote.replyFromId && typeof threadOrigin !== "string" && (
           <div className="flex cursor-pointer items-center space-x-2 px-2 hover:underline">
             <Image

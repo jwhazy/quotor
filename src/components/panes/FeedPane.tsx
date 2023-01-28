@@ -19,16 +19,19 @@ const Feed = () => {
   }, [fetch]);
 
   return (
-    <div className="space-y-4">
-      {typeof quotes !== "string" ? (
-        quotes
-          ?.slice(0)
-          .reverse()
-          .map((q) => <Quote key={q.id} quote={q} />)
-      ) : (
-        <p>{quotes}</p>
-      )}
-    </div>
+    <>
+      <h2 className="px-4">Your Feed</h2>
+      <div className="space-y-4">
+        {typeof quotes !== "string" ? (
+          quotes
+            ?.slice(0)
+            .reverse()
+            .map((q) => <Quote key={q.id} quote={q} />)
+        ) : (
+          <p>{quotes}</p>
+        )}
+      </div>
+    </>
   );
 };
 
