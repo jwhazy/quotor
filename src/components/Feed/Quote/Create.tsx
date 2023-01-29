@@ -34,9 +34,9 @@ const CreateQuote = ({ setShowModal, previousQuote }: Props) => {
   return (
     <>
       {createPortal(
-        <div className="animate__animated animate__fadeInTop absolute inset-0 top-0 right-0 bottom-0 left-0 z-50 bg-black/50 ">
+        <div className="animate__animated animate__fadeInTop   absolute inset-0 top-0 right-0 bottom-0 left-0 z-50 bg-black/50">
           <div className="m-24 flex justify-center">
-            <div className=" h-1/4 w-2/6 space-y-2 rounded-xl bg-zinc-900/80 px-8 pb-6 pt-4 backdrop-blur-sm">
+            <div className=" min-h-[25%] w-1/2 space-y-2 rounded-xl bg-zinc-900/80 px-8 pb-6 pt-4 backdrop-blur-sm">
               {previousQuote ? (
                 <div className="flex cursor-pointer items-center space-x-2 pl-4 hover:underline">
                   <Image
@@ -73,7 +73,7 @@ const CreateQuote = ({ setShowModal, previousQuote }: Props) => {
                   <textarea
                     placeholder="What's on your mind?"
                     onChange={(e) => setContent(e.target.value)}
-                    className="h-max w-full resize-none rounded-xl bg-transparent px-4 py-2 text-xl text-white outline-0"
+                    className="h-max w-full resize-y rounded-xl bg-transparent px-4 py-2 text-xl text-white outline-0"
                   />
                 </div>
                 <div className="flex">

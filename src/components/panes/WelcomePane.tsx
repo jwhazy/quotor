@@ -21,7 +21,7 @@ const WelcomePane: NextPage = () => {
     <>
       <div>
         <Link href="/">
-          <h1>Quotor</h1>
+          <h1 className="font-black">QUOTOR</h1>
           <p>Time for a new quote, perhaps?</p>
         </Link>
       </div>

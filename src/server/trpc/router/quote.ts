@@ -147,7 +147,14 @@ export const quoteRouter = router({
       },
       include: {
         likes: {},
-        comments: {},
+        comments: {
+          include: {
+            comments: {},
+            author: {},
+            likes: {},
+            replyFrom: {},
+          },
+        },
       },
     });
 

@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Router from "next/router";
 import { useState, useContext } from "react";
+import clsxm from "../../../utils/clsxm";
 
 import { trpc } from "../../../utils/trpc";
 import AppContext from "../../AppContext";
@@ -21,6 +22,7 @@ import CreateQuote from "./Create";
 type Props = {
   likes: Like[];
   comments: QuoteType[];
+  className?: string;
 } & QuoteType;
 
 const Quote = ({ quote }: { quote: Props }) => {
@@ -54,7 +56,15 @@ const Quote = ({ quote }: { quote: Props }) => {
   const expand = () => Router.push(`/quote/${quote.id}`);
   return (
     <>
-      <div className="flex cursor-pointer flex-col space-y-2 rounded-xl px-4 py-2 hover:bg-zinc-900/80">
+      <div
+        className={
+          (clsxm(
+            "z-20 flex cursor-pointer flex-col space-y-2 rounded-xl px-4 py-2 hover:bg-zinc-900/80"
+          ),
+          quote.className)
+        }
+        onClick={expand}
+      >
         {quote.replyFromId && typeof threadOrigin !== "string" && (
           <div className="flex cursor-pointer items-center space-x-2 px-2 hover:underline">
             <Image
@@ -91,8 +101,8 @@ const Quote = ({ quote }: { quote: Props }) => {
         </div>
 
         <p>{quote.content}</p>
-        <div className="flex space-x-2">
-          <Button onClick={() => sendLike()}>
+        <div className="z-50 flex space-x-2">
+          <Button onClick={() => sendLike()} className="z-50">
             {!liked ? (
               <HeartIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
             ) : (
@@ -101,7 +111,7 @@ const Quote = ({ quote }: { quote: Props }) => {
 
             <p>{likes}</p>
           </Button>
-          <Button onClick={() => setShowCreateQuote(true)}>
+          <Button onClick={() => setShowCreateQuote(true)} className="z-50">
             <ChatBubbleLeftEllipsisIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
             <p>{comments}</p>
           </Button>
