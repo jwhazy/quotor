@@ -7,10 +7,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
 import { Like, Quote as QuoteType } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Router from "next/router";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import clsxm from "../../../utils/clsxm";
 import getTimeAgo from "../../../utils/timeAgo";
 
@@ -20,13 +21,18 @@ import Button from "../../Button";
 import Input from "../../Input";
 import CreateQuote from "./Create";
 
-type Props = {
+type QuoteProps = {
   likes: Like[];
   comments: QuoteType[];
-  className?: string;
 } & QuoteType;
 
-const Quote = ({ quote }: { quote: Props }) => {
+type Props = {
+  hideAuthor?: boolean;
+  quote: QuoteProps;
+  className?: string;
+};
+
+const Quote = ({ hideAuthor, quote, className }: Props) => {
   const { data: session } = useSession();
 
   const [showCreateQuote, setShowCreateQuote] = useState(false);
@@ -55,10 +61,24 @@ const Quote = ({ quote }: { quote: Props }) => {
   }).data;
 
   const expand = () => Router.push(`/quote/${quote.id}`);
+  const expandOriginal = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    Router.push(`/quote/${threadOrigin?.id}`);
+  };
+
   return (
-    <div className="h-48 w-full space-y-2 rounded-xl bg-slate-200/20 px-6 py-2">
-      {quote.replyFromId && typeof threadOrigin !== "string" && (
-        <div className="-mb-2 flex cursor-pointer items-center space-x-2 pl-16 text-gray-200 hover:underline">
+    <div
+      className={clsxm(
+        "flex cursor-pointer flex-col space-y-2 break-words rounded-xl px-6 py-2 hover:bg-slate-200/20",
+        className
+      )}
+      onClick={expand}
+    >
+      {quote.replyFromId && !hideAuthor && typeof threadOrigin !== "string" && (
+        <div
+          className="-mb-2 flex cursor-pointer items-center space-x-2 pl-11 text-gray-200 hover:underline"
+          onClick={expandOriginal}
+        >
           <Image
             src={
               threadOrigin?.authorImage ||
@@ -77,25 +97,48 @@ const Quote = ({ quote }: { quote: Props }) => {
           </p>
         </div>
       )}
-      <div className="flex space-x-4 py-2 ">
-        <div>
-          <Image
-            src={
-              quote.authorImage || "https://cdn.jacksta.dev/assets/newUser.png"
-            }
-            className="rounded-full"
-            width={54}
-            height={54}
-            alt="Your profile picture"
-          />
+      <div className=" space-y-3 py-2">
+        <div className="flex  space-x-3 ">
+          <div>
+            <Image
+              src={
+                quote.authorImage ||
+                "https://cdn.jacksta.dev/assets/newUser.png"
+              }
+              className="rounded-full"
+              width={42}
+              height={42}
+              alt={`${quote.authorName}'s profile picture`}
+            />
+          </div>
+          <div>
+            <p className="font-medium">{quote.authorName}</p>
+            <p className="text-xs">{getTimeAgo(quote.createdOn)}</p>
+          </div>
         </div>
-        <div>
-          <h3>{quote.authorName}</h3>
-          <p className="text-sm">{getTimeAgo(quote.createdOn)}</p>
-        </div>
-      </div>
-      <div className="h-full w-full text-ellipsis whitespace-nowrap">
         <p>{quote.content}</p>
+
+        <div className="z-50 flex space-x-2">
+          <Button
+            onClick={(e) => {
+              if (e.stopPropagation) e.stopPropagation();
+              sendLike();
+            }}
+            className="z-50"
+          >
+            {!liked ? (
+              <HeartIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
+            ) : (
+              <SolidHeartIcon className="animate__animated animate__zoomIn w-5 cursor-pointer text-red-400 duration-75" />
+            )}
+
+            <p>{likes}</p>
+          </Button>
+          <Button onClick={() => setShowCreateQuote(true)} className="z-50">
+            <ChatBubbleLeftEllipsisIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
+            <p>{comments}</p>
+          </Button>
+        </div>
       </div>
     </div>
   );

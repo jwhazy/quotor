@@ -18,19 +18,15 @@ export default function getTimeAgo(date: Date) {
   let unit = "";
 
   if (secondsAgo < HOUR) {
-    [divisor, unit] = [MINUTE, "minute"];
+    [divisor, unit] = [MINUTE, "m"];
   } else if (secondsAgo < DAY) {
-    [divisor, unit] = [HOUR, "hour"];
+    [divisor, unit] = [HOUR, "h"];
   } else if (secondsAgo < WEEK) {
-    [divisor, unit] = [DAY, "day"];
+    [divisor, unit] = [DAY, "d"];
   } else if (secondsAgo < MONTH) {
-    [divisor, unit] = [WEEK, "week"];
-  } else if (secondsAgo < YEAR) {
-    [divisor, unit] = [MONTH, "month"];
-  } else {
-    [divisor, unit] = [YEAR, "year"];
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   }
 
-  const count = Math.floor(secondsAgo / divisor);
-  return `${count} ${unit}${count > 1 ? "s" : ""} ago`;
+  const count = Math.floor(secondsAgo / (divisor || 60));
+  return `${count}${unit} ago`;
 }

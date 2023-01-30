@@ -16,23 +16,21 @@ const QuotePage: NextPage = () => {
 
   const { id } = router.query;
 
-  if (!id) return null;
-
   // find quote
-  const quote = trpc.quote.find.useQuery(id as string).data;
+  const quote = trpc.quote.find.useQuery(id as string, {
+    refetchOnWindowFocus: false,
+    enabled: !!id?.length,
+  }).data;
 
   return (
     <Interface>
       <h1>Quote</h1>
       {quote && typeof quote !== "string" ? <Quote quote={quote} /> : null}
-      {typeof quote !== "string" ? (
-        quote?.comments
-          ?.slice(0)
-          .reverse()
-          .map((q) => <Quote key={q.id} quote={q} />)
-      ) : (
-        <p>{quote}</p>
-      )}
+      {typeof quote !== "string"
+        ? quote?.comments.map((comment) => (
+            <Quote key={comment.id} quote={comment} hideAuthor={true} />
+          ))
+        : null}
     </Interface>
   );
 };

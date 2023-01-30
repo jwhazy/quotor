@@ -139,7 +139,7 @@ export const quoteRouter = router({
   }),
 
   find: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    if (!ctx || !ctx.session.user.id || !input) return "error";
+    if (!ctx || !ctx.session.user.id || !input) throw new Error("error");
 
     const quote = await prisma?.quote.findFirst({
       where: {

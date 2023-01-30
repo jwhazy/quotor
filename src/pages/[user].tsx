@@ -6,6 +6,7 @@ import Quote from "../components/Feed/Quote";
 import Spinner from "../components/Spinner";
 import Trending from "../components/panes/TrendingPane";
 import WelcomePane from "../components/panes/WelcomePane";
+import Image from "next/image";
 import { trpc } from "../utils/trpc";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
 
@@ -37,7 +38,14 @@ const UserPage: NextPage = () => {
           <WelcomePane />
         </div>
         <div className="col-span-1 space-y-4  border-r border-zinc-800 px-6 py-4">
-          <div className="space-y-4 ">
+          <Image
+            src={user.image}
+            width={200}
+            height={200}
+            className="h-16 w-full blur-xl"
+            alt=""
+          />
+          <div className="-translate-y-12 space-y-4">
             <Avatar className="h-24 w-24">
               <AvatarImage src={user.image} />
               <AvatarFallback>
