@@ -34,7 +34,7 @@ const Interface = ({ requireAuth, leftPanel, rightPanel, children }: Props) => {
     );
 
   return (
-    <main className="px-24 pt-12">
+    <main className="px-2 pt-12 xl:px-24">
       <div className="grid grid-cols-3">
         <div className="col-span-1 space-y-4 border-r border-zinc-800 py-4 px-6">
           {leftPanel || <WelcomePane />}
