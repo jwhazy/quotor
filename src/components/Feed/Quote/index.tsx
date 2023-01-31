@@ -30,9 +30,19 @@ type Props = {
   hideAuthor?: boolean;
   quote: QuoteProps;
   className?: string;
+  disableLikes?: boolean;
+  disableComments?: boolean;
+  disableViewing?: boolean;
 };
 
-const Quote = ({ hideAuthor, quote, className }: Props) => {
+const Quote = ({
+  hideAuthor,
+  quote,
+  className,
+  disableComments,
+  disableLikes,
+  disableViewing,
+}: Props) => {
   const { data: session } = useSession();
 
   const [showCreateQuote, setShowCreateQuote] = useState(false);
@@ -77,7 +87,7 @@ const Quote = ({ hideAuthor, quote, className }: Props) => {
         "flex cursor-pointer flex-col space-y-2 break-words rounded-xl px-6 py-2 hover:bg-slate-200/20",
         className
       )}
-      onClick={expand}
+      onClick={!disableViewing ? expand : () => null}
     >
       {quote.replyFromId && !hideAuthor && typeof threadOrigin !== "string" && (
         <div
@@ -124,25 +134,29 @@ const Quote = ({ hideAuthor, quote, className }: Props) => {
         <p>{quote.content}</p>
 
         <div className="z-50 flex space-x-2">
-          <Button
-            onClick={(e) => {
-              if (e.stopPropagation) e.stopPropagation();
-              sendLike();
-            }}
-            className="z-50"
-          >
-            {!liked ? (
-              <HeartIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
-            ) : (
-              <SolidHeartIcon className="animate__animated animate__zoomIn w-5 cursor-pointer text-red-400 duration-75" />
-            )}
+          {!disableLikes ? (
+            <Button
+              onClick={(e) => {
+                if (e.stopPropagation) e.stopPropagation();
+                sendLike();
+              }}
+              className="z-50"
+            >
+              {!liked ? (
+                <HeartIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
+              ) : (
+                <SolidHeartIcon className="animate__animated animate__zoomIn w-5 cursor-pointer text-red-400 duration-75" />
+              )}
 
-            <p>{likes}</p>
-          </Button>
-          <Button onClick={() => setShowCreateQuote(true)} className="z-50">
-            <ChatBubbleLeftEllipsisIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
-            <p>{comments}</p>
-          </Button>
+              <p>{likes}</p>
+            </Button>
+          ) : null}
+          {!disableComments ? (
+            <Button onClick={() => setShowCreateQuote(true)} className="z-50">
+              <ChatBubbleLeftEllipsisIcon className="w-5 cursor-pointer text-gray-200 duration-75" />
+              <p>{comments}</p>
+            </Button>
+          ) : null}
         </div>
       </div>
     </div>
