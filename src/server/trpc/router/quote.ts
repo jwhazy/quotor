@@ -11,9 +11,9 @@ export const quoteRouter = router({
     .query(async ({ ctx, input }) => {
       console.log(ctx.session.user.id);
 
-      if (!ctx || !ctx.session.user.id) return "error";
+      if (!ctx || !ctx.session.user.id) throw new Error("Unauthorized.");
 
-      if (!input.content) return "error";
+      if (!input.content) throw new Error("No quote content provided.");
 
       if (input.replyTo) {
         const reply = await prisma?.quote.findFirst({
@@ -22,7 +22,7 @@ export const quoteRouter = router({
           },
         });
 
-        if (!reply) return "error";
+        if (!reply) throw new Error("No user found with this ID.");
 
         const creation = await prisma?.quote.create({
           data: {
@@ -44,8 +44,8 @@ export const quoteRouter = router({
           },
         });
 
-        if (creation) return "success";
-        return "error";
+        if (creation) return true;
+        throw new Error("Error creating your reply.");
       }
 
       const creation = await prisma?.quote.create({
@@ -62,12 +62,12 @@ export const quoteRouter = router({
         },
       });
 
-      if (creation) return "success";
-      return "error";
+      if (creation) return true;
+      throw new Error("Error creating your quote.");
     }),
 
   all: protectedProcedure.query(async ({ ctx }) => {
-    if (!ctx || !ctx.session.user.id) return "error";
+    if (!ctx || !ctx.session.user.id) throw new Error("Unauthorized.");
 
     const quotes = await prisma?.quote.findMany({
       include: {
@@ -80,7 +80,8 @@ export const quoteRouter = router({
   }),
 
   like: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    if (!ctx || !ctx.session.user.id || !input) return "error";
+    if (!ctx || !ctx.session.user.id || !input)
+      throw new Error("Unauthorized.");
 
     const liked = await prisma?.like.findFirst({
       where: {
@@ -98,7 +99,7 @@ export const quoteRouter = router({
         });
       } catch (error) {
         console.log(error);
-        return "error";
+        throw new Error("Error while performing this action.");
       }
 
       const likeCount = await prisma?.like.count({
@@ -127,7 +128,7 @@ export const quoteRouter = router({
       });
     } catch (error) {
       console.log(error);
-      return "error";
+      throw new Error("Error while performing this action.");
     }
 
     const likeCount = await prisma?.like.count({
@@ -139,7 +140,8 @@ export const quoteRouter = router({
   }),
 
   find: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    if (!ctx || !ctx.session.user.id || !input) throw new Error("error");
+    if (!ctx || !ctx.session.user.id || !input)
+      throw new Error("Could not find this quote.");
 
     const quote = await prisma?.quote.findFirst({
       where: {

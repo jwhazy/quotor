@@ -22,7 +22,7 @@ export const profileRouter = router({
           },
         });
 
-        if (!user) return "error";
+        if (!user) throw new Error("No user found with this name.");
 
         return user;
       }
@@ -44,7 +44,7 @@ export const profileRouter = router({
           },
         });
 
-        if (!user) return "error";
+        if (!user) throw new Error("No user found with this ID.");
 
         return user;
       }

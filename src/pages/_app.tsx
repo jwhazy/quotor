@@ -3,12 +3,14 @@ import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { useState, useMemo } from "react";
 import { SessionProvider } from "next-auth/react";
+import { useAtom } from "jotai/core/useAtom";
 
 import { trpc } from "../utils/trpc";
 
 import "animate.css";
 import "../styles/globals.css";
 import AppContext from "../components/AppContext";
+import Popup from "../components/Popup";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

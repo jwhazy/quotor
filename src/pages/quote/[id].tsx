@@ -25,8 +25,8 @@ const QuotePage: NextPage = () => {
   return (
     <Interface>
       <h1>Quote</h1>
-      {quote && typeof quote !== "string" ? <Quote quote={quote} /> : null}
-      {typeof quote !== "string"
+      {quote ? <Quote quote={quote} /> : null}
+      {quote
         ? quote?.comments.map((comment) => (
             <Quote key={comment.id} quote={comment} hideAuthor={true} />
           ))

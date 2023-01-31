@@ -23,7 +23,7 @@ export default function getTimeAgo(date: Date) {
     [divisor, unit] = [HOUR, "h"];
   } else if (secondsAgo < WEEK) {
     [divisor, unit] = [DAY, "d"];
-  } else if (secondsAgo < MONTH) {
+  } else {
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   }
 

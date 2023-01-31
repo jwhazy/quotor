@@ -44,9 +44,14 @@ const Quote = ({ hideAuthor, quote, className }: Props) => {
     return false;
   });
 
-  const { refetch: sendLike } = trpc.quote.like.useQuery(quote.id, {
+  const {
+    refetch: sendLike,
+    error,
+    isLoading,
+  } = trpc.quote.like.useQuery(quote.id, {
     refetchOnWindowFocus: false,
     enabled: false,
+    onError: (e) => console.log(e),
     onSuccess: (i) => {
       if (typeof i !== "number") return;
 
