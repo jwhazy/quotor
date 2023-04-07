@@ -7,7 +7,7 @@ A Twitter clone using the T3 stack. This was my "learning" project for tRPC, Pri
 - Feed
 - Login
 
-# What doesn't work
+## What doesn't work
 
 - Account pages
 - Quote pages
